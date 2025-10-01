@@ -3,7 +3,7 @@ import json
 # read json file
 data = json.load(open("network_devices.json", "r", encoding="utf-8"))
 
-# crate variable for text raport
+# crate variables for text raport
 report = ""
 
 # list for all units with problem status (offline/warning)
@@ -14,6 +14,11 @@ short_uptime_devices = []
 
 # device counter
 device_type_counts = {}
+
+# port counter for switches
+total_ports = 0
+used_ports = 0
+switches_counted = 0
 
 
 # company-name and last updated
@@ -39,6 +44,12 @@ for location in data["locations"]:
         # device counter
         device_type = device.get("type", "unknown_type")
         device_type_counts[device_type] = device_type_counts.get(device_type, 0) + 1
+
+       # number of used ports on switch
+        if device_type == "switch" and "ports" in device:
+            total_ports += device["ports"].get("total", 0)
+            used_ports += device["ports"].get("used", 0)
+            switches_counted += 1 
 
         # device status is "offline" or "warning"
         if device["status"].lower() in ["offline", "warning"]:
@@ -109,6 +120,23 @@ if short_uptime_devices:
         )
 else:
     report += "Inga enheter har kortare upptid än 30 dagar.\n"
+
+ # total port used for every switch
+report += "\n\n" + "=" * 50 + "\n"
+report += "### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###\n"
+report += "=" * 50 + "\n"
+
+if switches_counted > 0:
+    # Beräkna procentandelen
+    port_utilization_percent = (used_ports / total_ports) * 100
+    
+    report += f"Antal switchar inkluderade: {switches_counted}\n\n"
+    report += f"Totalt antal portar: {total_ports}\n"
+    report += f"Antal använda portar: {used_ports}\n"
+    # Använd :.1f för att formatera procent till en decimal
+    report += f"Total portanvändning: {port_utilization_percent:.1f}%\n"
+else:
+    report += "Inga switchar med portinformation hittades för att beräkna användningen.\n"   
 
 
 # total devices and type

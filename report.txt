@@ -92,6 +92,16 @@ Datacenter      | SW-DC-TOR-02         | 5
 
 
 ==================================================
+### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###
+==================================================
+Antal switchar inkluderade: 18
+
+Totalt antal portar: 676
+Antal använda portar: 541
+Total portanvändning: 80.0%
+
+
+==================================================
 ### TOTALT ANTAL ENHETER PER TYP ###
 ==================================================
 Totalt antal hanterade nätverksenheter: 40
