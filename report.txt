@@ -92,6 +92,12 @@ Datacenter      | SW-DC-TOR-02         | 5
 
 
 ==================================================
+### UNIKA VLAN I NÄTVERKET ###
+==================================================
+Inga unika VLAN-ID:ns hittades i enhetsdatan.
+
+
+==================================================
 ### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###
 ==================================================
 Antal switchar inkluderade: 18

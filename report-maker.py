@@ -20,6 +20,8 @@ total_ports = 0
 used_ports = 0
 switches_counted = 0
 
+# all Vlans in network
+unique_vlans = set()
 
 # company-name and last updated
 company_name = data["company"]
@@ -45,13 +47,20 @@ for location in data["locations"]:
         device_type = device.get("type", "unknown_type")
         device_type_counts[device_type] = device_type_counts.get(device_type, 0) + 1
 
-       # number of used ports on switch
+       # update the numbers of used ports on switch
         if device_type == "switch" and "ports" in device:
             total_ports += device["ports"].get("total", 0)
             used_ports += device["ports"].get("used", 0)
             switches_counted += 1 
 
-        # device status is "offline" or "warning"
+# 3. collect vlan id;s
+        vlan_id = device.get("vlan_id")
+        # add vlans
+        if vlan_id is not None:
+            unique_vlans.add(vlan_id)
+        # -----------------------------------------------
+
+         # device status is "offline" or "warning"
         if device["status"].lower() in ["offline", "warning"]:
             problem_devices.append({
                 "site": location["site"],
@@ -121,6 +130,33 @@ if short_uptime_devices:
 else:
     report += "Inga enheter har kortare upptid än 30 dagar.\n"
 
+# Unique vlan id in network
+
+report += "\n\n" + "=" * 50 + "\n"
+report += "### UNIKA VLAN I NÄTVERKET ###\n"
+report += "=" * 50 + "\n"
+
+if unique_vlans:
+    # sort to list
+    sorted_vlans = sorted(list(unique_vlans))
+    
+    report += f"Totalt antal unika VLAN: {len(sorted_vlans)}\n"
+    report += "Lista över unika VLAN-ID:n (sorterade):\n\n"
+    
+    # whrite in groups of 10
+    vlan_output = ""
+    for i, vlan in enumerate(sorted_vlans):
+        vlan_output += f"{vlan:<5}"
+        if (i + 1) % 10 == 0:
+            vlan_output += "\n"
+        else:
+            vlan_output += " "
+            
+    report += vlan_output.strip() + "\n"
+
+else:
+    report += "Inga unika VLAN-ID:ns hittades i enhetsdatan.\n"
+
  # total port used for every switch
 report += "\n\n" + "=" * 50 + "\n"
 report += "### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###\n"
@@ -165,4 +201,4 @@ else:
 with open('report.txt', 'w', encoding='utf-8') as f:
     f.write(report)
 
-    print (report)
+   
