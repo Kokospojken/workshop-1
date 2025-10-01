@@ -9,8 +9,12 @@ report = ""
 # list for all units with problem status (offline/warning)
 problem_devices = []
 
+# uptime counter
+short_uptime_devices = []
+
 # device counter
 device_type_counts = {}
+
 
 # company-name and last updated
 company_name = data["company"]
@@ -49,6 +53,17 @@ for location in data["locations"]:
             # add hostname
             report += f"  {device['hostname']}\n"
 
+     # short uptime less than 30 days
+        uptime = device.get("uptime_days")
+        if uptime is not None and 0 < uptime < 30:
+            short_uptime_devices.append({
+                "site": location["site"],
+                "hostname": device["hostname"],
+                "uptime": uptime,
+            }) 
+
+
+
 
 # problem units
 
@@ -71,6 +86,29 @@ if problem_devices:
         )
 else:
     report += "Inga enheter rapporterar status 'offline' eller 'warning'. Allt är online! :)\n"
+
+
+    # --- SEKTION 2: KORT UPPTID (< 30 DAGAR) ---
+
+report += "\n\n" + "=" * 50 + "\n"
+report += "### ENHETER MED KORT UPPTID (< 30 DAGAR) ###\n"
+report += "=" * 50 + "\n"
+
+if short_uptime_devices:
+    report += "Totalt antal enheter med kort upptid: " + str(len(short_uptime_devices)) + "\n\n"
+    
+    # table header
+    report += f"{'PLATS':<15} | {'HOSTNAME':<20} | {'UPTIME(Dagar)'}\n"
+    report += f"{'-'*15}-+-{'-'*20}-+-{'-'*15}-+-{'-'*15}\n"
+
+    for device in short_uptime_devices:
+        report += (
+            f"{device['site']:<15} | "
+            f"{device['hostname']:<20} | "
+            f"{device['uptime']:<15}\n"
+        )
+else:
+    report += "Inga enheter har kortare upptid än 30 dagar.\n"
 
 
 # total devices and type

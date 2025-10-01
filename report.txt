@@ -76,6 +76,22 @@ Datacenter      | SW-DC-TOR-02         | WARNING
 
 
 ==================================================
+### ENHETER MED KORT UPPTID (< 30 DAGAR) ###
+==================================================
+Totalt antal enheter med kort upptid: 7
+
+PLATS           | HOSTNAME             | UPTIME(Dagar)
+----------------+----------------------+-----------------+----------------
+Huvudkontor     | SW-ACCESS-05         | 15             
+Huvudkontor     | AP-FLOOR2-01         | 12             
+Huvudkontor     | AP-FLOOR2-02         | 2              
+Lager           | SW-LAGER-02          | 23             
+Lager           | RT-LAGER-01          | 2              
+Kontor Malmö    | SW-MAL-ACC-02        | 8              
+Datacenter      | SW-DC-TOR-02         | 5              
+
+
+==================================================
 ### TOTALT ANTAL ENHETER PER TYP ###
 ==================================================
 Totalt antal hanterade nätverksenheter: 40
