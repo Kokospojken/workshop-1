@@ -1,13 +1,17 @@
 Företag: TechCorp AB
 Senast uppdaterad: 2024-09-30T10:30:00
---------------------------------------------------
+==================================================
+
+### ÖVERSIKT - ALLA ENHETER PER PLATS ###
+==================================================
 
 Huvudkontor
+------------
   SW-CORE-01
   SW-CORE-02
   SW-DIST-01
   SW-DIST-02
-  SW-ACCESS-03
+  SW-ACCESS-03 (Status: OFFLINE)
   SW-ACCESS-04
   SW-ACCESS-05
   RT-EDGE-01
@@ -15,18 +19,20 @@ Huvudkontor
   AP-FLOOR1-01
   AP-FLOOR1-02
   AP-FLOOR2-01
-  AP-FLOOR2-02
+  AP-FLOOR2-02 (Status: WARNING)
   AP-FLOOR3-01
   FW-DMZ-01
 
 Lager
+------
   SW-LAGER-01
   SW-LAGER-02
-  RT-LAGER-01
+  RT-LAGER-01 (Status: WARNING)
   AP-LAGER-01
-  AP-LAGER-02
+  AP-LAGER-02 (Status: OFFLINE)
 
 Kontor Malmö
+-------------
   SW-MAL-CORE-01
   SW-MAL-ACC-01
   SW-MAL-ACC-02
@@ -36,10 +42,11 @@ Kontor Malmö
   FW-MAL-01
 
 Datacenter
+-----------
   SW-DC-CORE-01
   SW-DC-CORE-02
   SW-DC-TOR-01
-  SW-DC-TOR-02
+  SW-DC-TOR-02 (Status: WARNING)
   SW-DC-TOR-03
   RT-DC-EDGE-01
   FW-DC-01
@@ -48,6 +55,21 @@ Datacenter
   LB-DC-02
 
 Säkerhetskopia
+---------------
   SW-DR-01
   RT-DR-01
   FW-DR-01
+
+
+==================================================
+### VARNINGAR OCH PROBLEMSTATUS (OFFLINE/WARNING) ###
+==================================================
+Totalt antal enheter med problem: 5
+
+PLATS           | HOSTNAME             |  STATUS
+----------------+----------------------+---------
+Huvudkontor     | SW-ACCESS-03         | OFFLINE
+Huvudkontor     | AP-FLOOR2-02         | WARNING
+Lager           | RT-LAGER-01          | WARNING
+Lager           | AP-LAGER-02          | OFFLINE
+Datacenter      | SW-DC-TOR-02         | WARNING
