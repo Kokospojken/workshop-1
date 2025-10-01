@@ -73,3 +73,17 @@ Huvudkontor     | AP-FLOOR2-02         | WARNING
 Lager           | RT-LAGER-01          | WARNING
 Lager           | AP-LAGER-02          | OFFLINE
 Datacenter      | SW-DC-TOR-02         | WARNING
+
+
+==================================================
+### TOTALT ANTAL ENHETER PER TYP ###
+==================================================
+Totalt antal hanterade nätverksenheter: 40
+
+ENHETSTYP            | ANTAL
+---------------------+------
+Switch               | 18
+Access Point         | 9
+Router               | 6
+Firewall             | 5
+Load Balancer        | 2

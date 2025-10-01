@@ -6,8 +6,11 @@ data = json.load(open("network_devices.json", "r", encoding="utf-8"))
 # crate variable for text raport
 report = ""
 
-# List for all units with problem status (offline/warning)
+# list for all units with problem status (offline/warning)
 problem_devices = []
+
+# device counter
+device_type_counts = {}
 
 # company-name and last updated
 company_name = data["company"]
@@ -28,13 +31,17 @@ for location in data["locations"]:
     # add a list of the host names of the devices 
     # on the location to the report
     for device in location["devices"]:
+        
+        # device counter
+        device_type = device.get("type", "unknown_type")
+        device_type_counts[device_type] = device_type_counts.get(device_type, 0) + 1
+
         # device status is "offline" or "warning"
         if device["status"].lower() in ["offline", "warning"]:
             problem_devices.append({
                 "site": location["site"],
                 "hostname": device["hostname"],
                 "status": device["status"],
-                "ip": device["ip_address"]
             })
             # add hostname and status
             report += f"  {device['hostname']} (Status: {device['status'].upper()})\n"
@@ -66,6 +73,30 @@ else:
     report += "Inga enheter rapporterar status 'offline' eller 'warning'. Allt är online! :)\n"
 
 
+# total devices and type
+
+report += "\n\n" + "=" * 50 + "\n"
+report += "### TOTALT ANTAL ENHETER PER TYP ###\n"
+report += "=" * 50 + "\n"
+
+if device_type_counts:
+    # sorted counts for better visuality
+    sorted_counts = sorted(device_type_counts.items(), key=lambda item: item[1], reverse=True)
+    
+    total_devices = sum(device_type_counts.values())
+    report += f"Totalt antal hanterade nätverksenheter: {total_devices}\n\n"
+    
+    report += f"{'ENHETSTYP':<20} | {'ANTAL'}\n"
+    report += f"{'-'*20}-+-{'-'*5}\n"
+
+    for device_type, count in sorted_counts:
+        report += f"{device_type.replace('_', ' ').title():<20} | {count}\n"
+else:
+    report += "Kunde inte räkna några enhetstyper.\n" 
+
+
 # write the report to text file
 with open('report.txt', 'w', encoding='utf-8') as f:
     f.write(report)
+
+    print (report)
