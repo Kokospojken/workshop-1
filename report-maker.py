@@ -23,6 +23,9 @@ switches_counted = 0
 # collect all unique vlans
 vlan_set = set()
 
+# variables for statics on every site
+location_stats = {}
+
 
 # company-name and last updated
 company_name = data["company"]
@@ -36,9 +39,19 @@ report += "=" * 50 + "\n"
 
 # loop through the location list 
 for location in data["locations"]:
+    site_name = location["site"]
+    
+    # get stats for sites
+    location_stats[site_name] = {
+        "total": 0,
+        "online": 0,
+        "offline": 0,
+        "warning": 0
+    }
+    
     # add the site/'name' of the location to the report
-    report += "\n" + location["site"] + "\n"
-    report += "-" * (len(location["site"]) + 1) + "\n"
+    report += "\n" + site_name + "\n"
+    report += "-" * (len(site_name) + 1) + "\n"
 
     # add a list of the host names of the devices 
     # on the location to the report
@@ -61,9 +74,20 @@ for location in data["locations"]:
             for vlan_id in device["vlans"]:
                 if isinstance(vlan_id, (int, str)):
                      vlan_set.add(int(vlan_id))
-         
 
-         # device status is "offline" or "warning"
+         # update site stats
+        status = device["status"].lower()
+        location_stats[site_name]["total"] += 1
+        
+        if status == "online":
+            location_stats[site_name]["online"] += 1
+        elif status == "offline":
+            location_stats[site_name]["offline"] += 1
+        elif status == "warning":
+            location_stats[site_name]["warning"] += 1
+          
+         
+        # device status is "offline" or "warning"
         if device["status"].lower() in ["offline", "warning"]:
             problem_devices.append({
                 "site": location["site"],
@@ -76,7 +100,7 @@ for location in data["locations"]:
             # add hostname
             report += f"  {device['hostname']}\n"
 
-     # short uptime less than 30 days
+     # short uptime, less than 30 days
         uptime = device.get("uptime_days")
         if uptime is not None and 0 < uptime < 30:
             short_uptime_devices.append({
@@ -85,6 +109,40 @@ for location in data["locations"]:
                 "uptime": uptime,
             }) 
 
+# overview units per site
+
+report += "\n\n" + "=" * 50 + "\n"
+report += "### ÖVERSIKT AV ENHETER PER LOKATION ###\n"
+report += "=" * 50 + "\n"
+
+report += f"{'PLATS':<15} | {'TOTALT':<6} | {'ONLINE':<6} | {'VARNING':<7} | {'OFFLINE'}\n"
+report += f"{'-'*15}-+-{'-'*6}-+-{'-'*6}-+-{'-'*7}-+-{'-'*7}\n"
+
+total_online_global = 0
+total_offline_global = 0
+total_warning_global = 0
+
+for site, stats in location_stats.items():
+    total_online_global += stats["online"]
+    total_offline_global += stats["offline"]
+    total_warning_global += stats["warning"]
+    
+    report += (
+        f"{site:<15} | "
+        f"{stats['total']:<6} | "
+        f"{stats['online']:<6} | "
+        f"{stats['warning']:<7} | "
+        f"{stats['offline']}\n"
+    )
+
+report += f"{'='*15}-+-{('='*6)*3}-+-{('='*7)}\n"
+report += (
+    f"{'SUMMA':<15} | "
+    f"{sum(s['total'] for s in location_stats.values()):<6} | "
+    f"{total_online_global:<6} | "
+    f"{total_warning_global:<7} | "
+    f"{total_offline_global}\n"
+)
 
 
 
@@ -163,7 +221,7 @@ else:
     report += "Ingen VLAN-information hittades i enhetsdatan.\n"
    
 
- # total port used for every switch
+ # total port used on every switch
 report += "\n\n" + "=" * 50 + "\n"
 report += "### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###\n"
 report += "=" * 50 + "\n"
@@ -175,7 +233,7 @@ if switches_counted > 0:
     report += f"Antal switchar inkluderade: {switches_counted}\n\n"
     report += f"Totalt antal portar: {total_ports}\n"
     report += f"Antal använda portar: {used_ports}\n"
-    # Använduse :.1f for onley one decimal
+    # use :.1f for only one decimal
     report += f"Total portanvändning: {port_utilization_percent:.1f}%\n"
 else:
     report += "Inga switchar med portinformation hittades för att beräkna användningen.\n"   

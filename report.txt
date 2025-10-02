@@ -62,6 +62,20 @@ Säkerhetskopia
 
 
 ==================================================
+### ÖVERSIKT AV ENHETER PER LOKATION ###
+==================================================
+PLATS           | TOTALT | ONLINE | VARNING | OFFLINE
+----------------+--------+--------+---------+--------
+Huvudkontor     | 15     | 13     | 1       | 1
+Lager           | 5      | 3      | 1       | 1
+Kontor Malmö    | 7      | 7      | 0       | 0
+Datacenter      | 10     | 9      | 1       | 0
+Säkerhetskopia  | 3      | 3      | 0       | 0
+===============-+-==================-+-=======
+SUMMA           | 40     | 35     | 3       | 2
+
+
+==================================================
 ### VARNINGAR OCH PROBLEMSTATUS (OFFLINE/WARNING) ###
 ==================================================
 Totalt antal enheter med problem: 5
