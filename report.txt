@@ -92,9 +92,13 @@ Datacenter      | SW-DC-TOR-02         | 5
 
 
 ==================================================
-### UNIKA VLAN I NÄTVERKET ###
+### ÖVERSIKT - ALLA UNIKA VLAN-ID:N I NÄTVERKET ###
 ==================================================
-Inga unika VLAN-ID:ns hittades i enhetsdatan.
+Totalt antal unika VLANs: 19
+
+Använda VLAN-ID:n (sorterade):
+10, 20, 30, 40, 50, 100, 110, 120, 200, 300, 
+400, 500, 600, 700, 800, 900, 1000, 2000, 2100
 
 
 ==================================================

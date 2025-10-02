@@ -20,8 +20,9 @@ total_ports = 0
 used_ports = 0
 switches_counted = 0
 
-# all Vlans in network
-unique_vlans = set()
+# collect all unique vlans
+vlan_set = set()
+
 
 # company-name and last updated
 company_name = data["company"]
@@ -53,12 +54,14 @@ for location in data["locations"]:
             used_ports += device["ports"].get("used", 0)
             switches_counted += 1 
 
-# 3. collect vlan id;s
-        vlan_id = device.get("vlan_id")
-        # add vlans
-        if vlan_id is not None:
-            unique_vlans.add(vlan_id)
-        # -----------------------------------------------
+            # collect all vlans
+        # check for vlan ids
+        if "vlans" in device and isinstance(device["vlans"], list):
+            # add all vlan to the set
+            for vlan_id in device["vlans"]:
+                if isinstance(vlan_id, (int, str)):
+                     vlan_set.add(int(vlan_id))
+         
 
          # device status is "offline" or "warning"
         if device["status"].lower() in ["offline", "warning"]:
@@ -108,7 +111,7 @@ else:
     report += "Inga enheter rapporterar status 'offline' eller 'warning'. Allt är online! :)\n"
 
 
-    # --- SEKTION 2: KORT UPPTID (< 30 DAGAR) ---
+    # short uptime less than 30 days
 
 report += "\n\n" + "=" * 50 + "\n"
 report += "### ENHETER MED KORT UPPTID (< 30 DAGAR) ###\n"
@@ -130,32 +133,35 @@ if short_uptime_devices:
 else:
     report += "Inga enheter har kortare upptid än 30 dagar.\n"
 
-# Unique vlan id in network
+ # report for all vlans
 
 report += "\n\n" + "=" * 50 + "\n"
-report += "### UNIKA VLAN I NÄTVERKET ###\n"
+report += "### ÖVERSIKT - ALLA UNIKA VLAN-ID:N I NÄTVERKET ###\n"
 report += "=" * 50 + "\n"
 
-if unique_vlans:
-    # sort to list
-    sorted_vlans = sorted(list(unique_vlans))
+if vlan_set:
+    # sort vlans into list
+    sorted_vlans = sorted(list(vlan_set))
     
-    report += f"Totalt antal unika VLAN: {len(sorted_vlans)}\n"
-    report += "Lista över unika VLAN-ID:n (sorterade):\n\n"
+    report += f"Totalt antal unika VLANs: {len(sorted_vlans)}\n\n"
     
-    # whrite in groups of 10
+    # format the list like csv
+    report += "Använda VLAN-ID:n (sorterade):\n"
+    
+    # split list for better visuality
     vlan_output = ""
-    for i, vlan in enumerate(sorted_vlans):
-        vlan_output += f"{vlan:<5}"
+    for i, vlan_id in enumerate(sorted_vlans):
+        vlan_output += str(vlan_id)
+        if i < len(sorted_vlans) - 1:
+            vlan_output += ", "
         if (i + 1) % 10 == 0:
             vlan_output += "\n"
-        else:
-            vlan_output += " "
             
     report += vlan_output.strip() + "\n"
-
+    
 else:
-    report += "Inga unika VLAN-ID:ns hittades i enhetsdatan.\n"
+    report += "Ingen VLAN-information hittades i enhetsdatan.\n"
+   
 
  # total port used for every switch
 report += "\n\n" + "=" * 50 + "\n"
@@ -163,13 +169,13 @@ report += "### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###\n"
 report += "=" * 50 + "\n"
 
 if switches_counted > 0:
-    # Beräkna procentandelen
+    # count %
     port_utilization_percent = (used_ports / total_ports) * 100
     
     report += f"Antal switchar inkluderade: {switches_counted}\n\n"
     report += f"Totalt antal portar: {total_ports}\n"
     report += f"Antal använda portar: {used_ports}\n"
-    # Använd :.1f för att formatera procent till en decimal
+    # Använduse :.1f for onley one decimal
     report += f"Total portanvändning: {port_utilization_percent:.1f}%\n"
 else:
     report += "Inga switchar med portinformation hittades för att beräkna användningen.\n"   
