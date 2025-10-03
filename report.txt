@@ -2,175 +2,104 @@ Företag: TechCorp AB
 Senast uppdaterad: 2024-09-30T10:30:00
 ==================================================
 
-### ÖVERSIKT - ALLA ENHETER PER PLATS (ev. problem) ###
+### EXECUTIVE SUMMARY ###
 ==================================================
+Totalt antal hanterade enheter: 40
+Enheter med kända problem (Åtgärd krävs): 16 (40.0% av flottan)
+Status: OFFLINE: 2
+Status: VARNING: 3
+Total portanvändning för switchar: 80.0% (541 av 676)
 
-Huvudkontor
-------------
-  SW-CORE-01
+**KRITISKA ENHETER**
+🚨 2 enheter är **OFFLINE** och kräver omedelbar uppmärksamhet. Se problemöversikten.
+
+[Se nedan för detaljerad analys per plats, problem och enhetstyp.]
+
+### DETALJERAD LISTA - ALLA ENHETER PER PLATS ###
+==================================================
   SW-CORE-01 (PROBLEMENHET: ONLINE)
   SW-CORE-02
-  SW-CORE-02
   SW-DIST-01
-  SW-DIST-01
-  SW-DIST-02
   SW-DIST-02 (PROBLEMENHET: ONLINE)
-  SW-ACCESS-03 (Status: OFFLINE)
   SW-ACCESS-03 (PROBLEMENHET: OFFLINE)
   SW-ACCESS-04
-  SW-ACCESS-04
-  SW-ACCESS-05
   SW-ACCESS-05 (PROBLEMENHET: ONLINE)
   RT-EDGE-01
-  RT-EDGE-01
-  RT-EDGE-02
   RT-EDGE-02
   AP-FLOOR1-01
-  AP-FLOOR1-01
   AP-FLOOR1-02
-  AP-FLOOR1-02
-  AP-FLOOR2-01
-  AP-FLOOR2-01
-  AP-FLOOR2-02 (Status: WARNING)
+  AP-FLOOR2-01 (PROBLEMENHET: ONLINE)
   AP-FLOOR2-02 (PROBLEMENHET: WARNING)
   AP-FLOOR3-01
-  AP-FLOOR3-01
   FW-DMZ-01
-  FW-DMZ-01
-
-Lager
-------
   SW-LAGER-01
-  SW-LAGER-01
-  SW-LAGER-02
   SW-LAGER-02 (PROBLEMENHET: ONLINE)
-  RT-LAGER-01 (Status: WARNING)
   RT-LAGER-01 (PROBLEMENHET: WARNING)
   AP-LAGER-01
-  AP-LAGER-01
-  AP-LAGER-02 (Status: OFFLINE)
   AP-LAGER-02 (PROBLEMENHET: OFFLINE)
-
-Kontor Malmö
--------------
   SW-MAL-CORE-01
-  SW-MAL-CORE-01
-  SW-MAL-ACC-01
   SW-MAL-ACC-01 (PROBLEMENHET: ONLINE)
-  SW-MAL-ACC-02
   SW-MAL-ACC-02 (PROBLEMENHET: ONLINE)
   RT-MAL-01
-  RT-MAL-01
-  AP-MAL-01
   AP-MAL-01
   AP-MAL-02
-  AP-MAL-02
   FW-MAL-01
-  FW-MAL-01
-
-Datacenter
------------
-  SW-DC-CORE-01
   SW-DC-CORE-01 (PROBLEMENHET: ONLINE)
-  SW-DC-CORE-02
   SW-DC-CORE-02 (PROBLEMENHET: ONLINE)
-  SW-DC-TOR-01
   SW-DC-TOR-01 (PROBLEMENHET: ONLINE)
-  SW-DC-TOR-02 (Status: WARNING)
   SW-DC-TOR-02 (PROBLEMENHET: WARNING)
-  SW-DC-TOR-03
   SW-DC-TOR-03 (PROBLEMENHET: ONLINE)
   RT-DC-EDGE-01
-  RT-DC-EDGE-01
-  FW-DC-01
   FW-DC-01
   FW-DC-02
-  FW-DC-02
-  LB-DC-01
   LB-DC-01
   LB-DC-02
-  LB-DC-02
-
-Säkerhetskopia
----------------
-  SW-DR-01
   SW-DR-01
   RT-DR-01
-  RT-DR-01
-  FW-DR-01
   FW-DR-01
 
 
 ==================================================
-### ENHETER MED POTENTIELLA PROBLEM ###
+### 1. ENHETER MED POTENTIELLA PROBLEM ###
 ==================================================
-Totalt antal enheter med en eller flera problemindikationer: 15
+Totalt antal enheter med en eller flera problemindikationer: 16
 
 PLATS           | HOSTNAME             | IP-ADRESS       | PROBLEMINDIKATIONER
-----------------+----------------------+-----------------+-----------------------------------------
+----------------+----------------------+-----------------+---------------------------------------------------
 Huvudkontor     | SW-CORE-01           | 192.168.1.1     | Hög portanvändning (87.5%)
 Huvudkontor     | SW-DIST-02           | 192.168.1.4     | Hög portanvändning (91.7%)
 Huvudkontor     | SW-ACCESS-03         | 192.168.1.5     | Status: OFFLINE
-Huvudkontor     | SW-ACCESS-05         | 192.168.1.7     | Hög portanvändning (95.8%)
-Huvudkontor     | AP-FLOOR2-02         | 192.168.20.102  | Status: VARNING
-Lager           | SW-LAGER-02          | 192.168.2.2     | Hög portanvändning (93.8%)
-Lager           | RT-LAGER-01          | 192.168.2.254   | Status: VARNING
+Huvudkontor     | SW-ACCESS-05         | 192.168.1.7     | Hög portanvändning (95.8%), Låg upptid (15 dagar)
+Huvudkontor     | AP-FLOOR2-01         | 192.168.20.101  | Låg upptid (12 dagar)
+Huvudkontor     | AP-FLOOR2-02         | 192.168.20.102  | Status: VARNING, Låg upptid (2 dagar)
+Lager           | SW-LAGER-02          | 192.168.2.2     | Hög portanvändning (93.8%), Låg upptid (23 dagar)
+Lager           | RT-LAGER-01          | 192.168.2.254   | Status: VARNING, Låg upptid (2 dagar)
 Lager           | AP-LAGER-02          | 192.168.200.102 | Status: OFFLINE
 Kontor Malmö    | SW-MAL-ACC-01        | 192.168.3.2     | Hög portanvändning (83.3%)
-Kontor Malmö    | SW-MAL-ACC-02        | 192.168.3.3     | Hög portanvändning (100.0%)
+Kontor Malmö    | SW-MAL-ACC-02        | 192.168.3.3     | Hög portanvändning (100.0%), Låg upptid (8 dagar)
 Datacenter      | SW-DC-CORE-01        | 10.0.0.1        | Hög portanvändning (95.8%)
 Datacenter      | SW-DC-CORE-02        | 10.0.0.2        | Hög portanvändning (95.8%)
 Datacenter      | SW-DC-TOR-01         | 10.0.1.1        | Hög portanvändning (100.0%)
-Datacenter      | SW-DC-TOR-02         | 10.0.1.2        | Hög portanvändning (97.9%), Status: VARNING
+Datacenter      | SW-DC-TOR-02         | 10.0.1.2        | Hög portanvändning (97.9%), Status: VARNING, Låg upptid (5 dagar)
 Datacenter      | SW-DC-TOR-03         | 10.0.1.3        | Hög portanvändning (91.7%)
 
 
-=======================================================
-### ÖVERSIKT AV ENHETER PER SITE ###
-=======================================================
+==================================================
+### 2. ÖVERSIKT AV ENHETER PER SITE ###
+==================================================
 PLATS           | TOTALT | ONLINE | VARNING | OFFLINE
 ----------------+--------+--------+---------+--------
-Huvudkontor     | 30     | 26     | 2       | 2
-Lager           | 10     | 6      | 2       | 2
-Kontor Malmö    | 14     | 14     | 0       | 0
-Datacenter      | 20     | 18     | 2       | 0
-Säkerhetskopia  | 6      | 6      | 0       | 0
+Huvudkontor     | 15     | 13     | 1       | 1
+Lager           | 5      | 3      | 1       | 1
+Kontor Malmö    | 7      | 7      | 0       | 0
+Datacenter      | 10     | 9      | 1       | 0
+Säkerhetskopia  | 3      | 3      | 0       | 0
 ===============-+-==================-+-=======
-SUMMA           | 80     | 70     | 6       | 4
-
-
-=======================================================
-### VARNINGAR OCH PROBLEMSTATUS (OFFLINE/WARNING) ###
-=======================================================
-Totalt antal enheter med problem: 5
-
-PLATS           | HOSTNAME             |  STATUS
-----------------+----------------------+---------
-Huvudkontor     | SW-ACCESS-03         | OFFLINE
-Huvudkontor     | AP-FLOOR2-02         | WARNING
-Lager           | RT-LAGER-01          | WARNING
-Lager           | AP-LAGER-02          | OFFLINE
-Datacenter      | SW-DC-TOR-02         | WARNING
+SUMMA           | 40     | 35     | 3       | 2
 
 
 ==================================================
-### ENHETER MED KORT UPPTID (< 30 DAGAR) ###
-==================================================
-Totalt antal enheter med kort upptid: 7
-
-PLATS           | HOSTNAME             | UPTIME(Dagar)
-----------------+----------------------+-----------------+----------------
-Huvudkontor     | SW-ACCESS-05         | 15             
-Huvudkontor     | AP-FLOOR2-01         | 12             
-Huvudkontor     | AP-FLOOR2-02         | 2              
-Lager           | SW-LAGER-02          | 23             
-Lager           | RT-LAGER-01          | 2              
-Kontor Malmö    | SW-MAL-ACC-02        | 8              
-Datacenter      | SW-DC-TOR-02         | 5              
-
-
-==================================================
-### ÖVERSIKT - ALLA UNIKA VLAN-ID:N I NÄTVERKET ###
+### 3. ÖVERSIKT - ALLA UNIKA VLAN-ID:N I NÄTVERKET ###
 ==================================================
 Totalt antal unika VLANs: 19
 
@@ -180,24 +109,24 @@ Använda VLAN-ID:n (sorterade):
 
 
 ==================================================
-### TOTAL PORTANVÄNDNING FÖR SWITCHAR ###
+### 4. TOTAL PORTANVÄNDNING FÖR SWITCHAR ###
 ==================================================
-Antal switchar inkluderade: 36
+Antal switchar inkluderade: 18
 
-Totalt antal portar: 1352
-Antal använda portar: 1082
+Totalt antal portar: 676
+Antal använda portar: 541
 Total portanvändning: 80.0%
 
 
 ==================================================
-### TOTALT ANTAL ENHETER PER TYP ###
+### 5. TOTALT ANTAL ENHETER PER TYP ###
 ==================================================
-Totalt antal hanterade nätverksenheter: 80
+Totalt antal hanterade nätverksenheter: 40
 
 ENHETSTYP            | ANTAL
 ---------------------+------
-Switch               | 36
-Access Point         | 18
-Router               | 12
-Firewall             | 10
-Load Balancer        | 4
+Switch               | 18
+Access Point         | 9
+Router               | 6
+Firewall             | 5
+Load Balancer        | 2
