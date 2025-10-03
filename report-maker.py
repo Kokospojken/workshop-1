@@ -6,26 +6,28 @@ data = json.load(open("network_devices.json", "r", encoding="utf-8"))
 # crate variables for text raport
 report = ""
 
-# list for all units with problem status (offline/warning)
+# variabel for all problem devices
+potential_issue_devices = []
+
+# listvariabel for all units with problem status (offline/warning)
 problem_devices = []
 
-# uptime counter
+# variabel uptime counter
 short_uptime_devices = []
 
-# device counter
+# variabel device counter
 device_type_counts = {}
 
-# port counter for switches
+# variabel for port counter for switches
 total_ports = 0
 used_ports = 0
 switches_counted = 0
 
-# collect all unique vlans
+# variabel to collect all unique vlans
 vlan_set = set()
 
 # variables for statics on every site
 location_stats = {}
-
 
 # company-name and last updated
 company_name = data["company"]
@@ -34,7 +36,7 @@ report += f"Senast uppdaterad: {data['last_updated']}\n"
 report += "=" * 50 + "\n"
 
 # All units on site
-report += "\n### ÖVERSIKT - ALLA ENHETER PER PLATS ###\n"
+report += "\n### ÖVERSIKT - ALLA ENHETER PER PLATS (ev. problem) ###\n"
 report += "=" * 50 + "\n"
 
 # loop through the location list 
@@ -56,6 +58,33 @@ for location in data["locations"]:
     # add a list of the host names of the devices 
     # on the location to the report
     for device in location["devices"]:
+
+ # variabel for loops
+        hostname = device["hostname"]
+        device_type = device.get("type", "unknown_type")
+        status = device["status"].lower()
+        ip = device.get("ip_address", "N/A")
+        
+        # variabel to collect all device issues
+        device_issues = []
+
+      # count device types
+        device_type_counts[device_type] = device_type_counts.get(device_type, 0) + 1
+
+        # check for high port use
+        if device_type == "switch" and "ports" in device:
+            total = device["ports"].get("total", 0)
+            used = device["ports"].get("used", 0)
+            
+            # global stats
+            total_ports += total
+            used_ports += used
+            switches_counted += 1 
+
+            # check for high usage
+            if total > 0 and (used / total) > 0.8:
+                utilization = (used / total) * 100
+                device_issues.append(f"Hög portanvändning ({utilization:.1f}%)")         
         
         # device counter
         device_type = device.get("type", "unknown_type")
@@ -74,6 +103,17 @@ for location in data["locations"]:
             for vlan_id in device["vlans"]:
                 if isinstance(vlan_id, (int, str)):
                      vlan_set.add(int(vlan_id))
+
+          # looking for offline and other warnings
+        location_stats[site_name]["total"] += 1
+        if status == "online":
+            location_stats[site_name]["online"] += 1
+        elif status == "offline":
+            location_stats[site_name]["offline"] += 1
+            device_issues.append(f"Status: OFFLINE")
+        elif status == "warning":
+            location_stats[site_name]["warning"] += 1
+            device_issues.append(f"Status: VARNING")            
 
          # update site stats
         status = device["status"].lower()
@@ -109,11 +149,49 @@ for location in data["locations"]:
                 "uptime": uptime,
             }) 
 
-# overview units per site
+    # add global view to problem list
+        if device_issues:
+            # add global view
+            report += f"  {hostname} (PROBLEMENHET: {status.upper()})\n"
+            
+            # add to problem device list
+            potential_issue_devices.append({
+                "site": site_name,
+                "hostname": hostname,
+                "ip": ip,
+                "issues": ", ".join(device_issues)
+            })
+        else:
+            # add hostname
+            report += f"  {hostname}\n"
 
 report += "\n\n" + "=" * 50 + "\n"
-report += "### ÖVERSIKT AV ENHETER PER LOKATION ###\n"
+report += "### ENHETER MED POTENTIELLA PROBLEM ###\n"
 report += "=" * 50 + "\n"
+
+if potential_issue_devices:
+    report += "Totalt antal enheter med en eller flera problemindikationer: " + str(len(potential_issue_devices)) + "\n\n"
+    
+    # table headings
+    report += f"{'PLATS':<15} | {'HOSTNAME':<20} | {'IP-ADRESS':<15} | {'PROBLEMINDIKATIONER'}\n"
+    report += f"{'-'*15}-+-{'-'*20}-+-{'-'*15}-+-{'-'*40}\n"
+
+    for device in potential_issue_devices:
+        report += (
+            f"{device['site']:<15} | "
+            f"{device['hostname']:<20} | "
+            f"{device['ip']:<15} | "
+            f"{device['issues']}\n"
+        )
+else:
+    report += "Inga enheter rapporterar status 'offline', 'warning', låg upptid eller hög portanvändning .\n"
+                    
+
+# overview units per site
+
+report += "\n\n" + "=" * 55 + "\n"
+report += "### ÖVERSIKT AV ENHETER PER SITE ###\n"
+report += "=" * 55 + "\n"
 
 report += f"{'PLATS':<15} | {'TOTALT':<6} | {'ONLINE':<6} | {'VARNING':<7} | {'OFFLINE'}\n"
 report += f"{'-'*15}-+-{'-'*6}-+-{'-'*6}-+-{'-'*7}-+-{'-'*7}\n"
@@ -146,11 +224,11 @@ report += (
 
 
 
-# problem units
+# problem units report
 
-report += "\n\n" + "=" * 50 + "\n"
+report += "\n\n" + "=" * 55 + "\n"
 report += "### VARNINGAR OCH PROBLEMSTATUS (OFFLINE/WARNING) ###\n"
-report += "=" * 50 + "\n"
+report += "=" * 55 + "\n"
 
 if problem_devices:
     report += "Totalt antal enheter med problem: " + str(len(problem_devices)) + "\n\n"
