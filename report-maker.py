@@ -50,7 +50,11 @@ for location in data["locations"]:
         "offline": 0,
         "warning": 0
     }
-    
+
+     # adding sites to the device list
+    report_details += "\n" + site_name + "\n"
+    report_details += "-" * (len(site_name) + 1) + "\n"
+
     for device in location["devices"]:
 
         # variabel for loops
